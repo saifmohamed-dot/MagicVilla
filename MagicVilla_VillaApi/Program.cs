@@ -1,5 +1,7 @@
 using MagicVilla_VillaApi;
 using MagicVilla_VillaApi.DataStore;
+
+using MagicVilla_VillaApi.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,8 @@ builder.Services.AddDbContext<VillasDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(DbContext) , typeof(VillasDBContext));
 
 
 var app = builder.Build();

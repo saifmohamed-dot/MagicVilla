@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MagicVilla_VillaApi.Repository;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MagicVilla_VillaApi.Models
 {
-    public class Villa
+    public class Villa : IEntity /* To Make The ID Property Abstract */
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -2,9 +2,9 @@
 using MagicVilla_VillaApi.DataStore;
 using MagicVilla_VillaApi.Dto;
 using MagicVilla_VillaApi.Models;
+using MagicVilla_VillaApi.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MagicVilla_VillaApi.Controllers
 {
@@ -15,20 +15,23 @@ namespace MagicVilla_VillaApi.Controllers
         readonly ILogger<VillaApiController> _logger;
         readonly VillasDBContext _dbContext;
         readonly IMapper _mapper;
+        readonly IRepository<Villa> _repository;
         public VillaApiController(ILogger<VillaApiController> logger 
             , VillasDBContext dbContext
-            , IMapper mapper)
+            , IMapper mapper
+            , IRepository<Villa> repository)
         {
             _logger = logger;
             _dbContext = dbContext;
             _mapper = mapper;
+            _repository = repository;
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<VillaDto>>> GetVillas()
         {
             _logger.LogInformation("Get All Villas Values");
-            return Ok(await _dbContext.Villas.ToListAsync());
+            return Ok(await _repository.GetAllAsync());
         }
         [HttpGet("{id:int}" , Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,7 +42,7 @@ namespace MagicVilla_VillaApi.Controllers
             {
                 return BadRequest();
             }
-            Villa? value = await _dbContext.Villas.FirstOrDefaultAsync(v => v.Id == id);
+            Villa? value = await _repository.GetByIdAsync(id.Value);
             if (value == null)
             {
                 return NotFound();
@@ -58,13 +61,10 @@ namespace MagicVilla_VillaApi.Controllers
                 return BadRequest();
             }
             Villa vi = _mapper.Map<Villa>(villa);
-            _dbContext.Villas.Add(vi);
             vi.DateCreated = DateTime.Now;
             vi.DateUpdated = DateTime.Now;
-            await _dbContext.SaveChangesAsync();
-            int lastId = _dbContext.Villas.OrderByDescending(v => v.Id)
-                .Select(v => v.Id)
-                .First();
+            var lastId = await _repository.CreateAsync(vi);
+            vi.Id = lastId;
             _logger.LogInformation($"Create Villa {lastId}");
             return CreatedAtRoute("GetVilla", new { id = lastId }, _mapper.Map<VillaDto>(villa));
         }
@@ -78,13 +78,12 @@ namespace MagicVilla_VillaApi.Controllers
             {
                 return BadRequest(); // 400 bad
             }
-            Villa? villa = await _dbContext.Villas.Where(v => v.Id == id).FirstOrDefaultAsync();
+            Villa? villa = await _repository.GetByIdAsync(id.Value);
             if (villa == null)
             {
                 return NotFound(); // 404 not 
             }
-            _dbContext.Villas.Remove(villa);
-            await _dbContext.SaveChangesAsync();
+            await _repository.DeleteAsync(villa);
             return NoContent();
         }
         [HttpPut("{id:int}", Name = "UpdateVilla")]
@@ -97,7 +96,7 @@ namespace MagicVilla_VillaApi.Controllers
             {
                 return BadRequest(); // 400 <-
             }
-            Villa? vill = await _dbContext.Villas.AsNoTracking().Where(v => v.Id == id).FirstOrDefaultAsync();
+            Villa? vill = await _repository.GetByIdAsync(id.Value, false);
             if (vill  == null)
             {
                 return NotFound(); // 404 <-
