@@ -14,8 +14,9 @@ builder.Services.AddDbContext<VillasDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped(typeof(DbContext) , typeof(VillasDBContext));
+//builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IVillaRepository, VillaRepository>();
+builder.Services.AddScoped<DbContext , VillasDBContext>();
 
 
 var app = builder.Build();

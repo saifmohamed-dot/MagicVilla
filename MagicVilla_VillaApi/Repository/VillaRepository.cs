@@ -3,17 +3,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla_VillaApi.Repository
 {
-    public class VillaRepository : Repository<Villa> , IEntityUpdatable<Villa>
+    public class VillaRepository : Repository<Villa> , IVillaRepository
     {
+        readonly DbContext _context;
         public VillaRepository(DbContext dbContext) 
-        : base(dbContext) {  }
-        // returning the current object with the IEntityUpdatable<Villa> referencing it ->
-        // so we could referencing our own update without casting in the controller ->
-        public IEntityUpdatable<Villa> GetUpdatable() => this;
-
-        public void Update(Villa entity)
+        : base(dbContext)
         {
-            
+            _context = dbContext;
+        }
+        
+        public async Task Update(Villa entity)
+        {
+            entity.DateUpdated = DateTime.Now;
+            _context.Set<Villa>().Update(entity);
+            await SaveAsync();
         }
     }
 }

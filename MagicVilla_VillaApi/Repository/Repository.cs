@@ -41,7 +41,6 @@ namespace MagicVilla_VillaApi.Repository
                 return await _set!.Where(e => e.Id == id).FirstOrDefaultAsync();
             return await _set!.AsNoTracking().Where(e => e.Id == id).FirstOrDefaultAsync();
         }
-
         public async Task SaveAsync()
         {
             await _context!.SaveChangesAsync();

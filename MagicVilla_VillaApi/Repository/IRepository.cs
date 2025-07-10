@@ -3,7 +3,7 @@
 namespace MagicVilla_VillaApi.Repository
 {
     // A Generic Crud Operation ->
-    public interface IRepository<T> where T : class
+    public interface IRepository<T> where T : class, IEntity
     {
         // return all rows unconditionally ->
         Task<IEnumerable<T>> GetAllAsync();
