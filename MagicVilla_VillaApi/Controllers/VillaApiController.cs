@@ -3,6 +3,7 @@ using MagicVilla_VillaApi.DataStore;
 using MagicVilla_VillaApi.Dto;
 using MagicVilla_VillaApi.Models;
 using MagicVilla_VillaApi.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MagicVilla_VillaApi.Controllers
@@ -12,35 +13,36 @@ namespace MagicVilla_VillaApi.Controllers
     public class VillaApiController : ControllerBase
     {
         readonly ILogger<VillaApiController> _logger;
-        readonly VillasDBContext _dbContext;
         readonly IMapper _mapper;
         readonly IVillaRepository _repository;
         readonly APIResponse _response;
         public VillaApiController(ILogger<VillaApiController> logger 
-            , VillasDBContext dbContext
             , IMapper mapper
             , IVillaRepository repository)
         {
             _logger = logger;
-            _dbContext = dbContext;
             _mapper = mapper;
             _repository = repository;
             _response = new();
         }
+        
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
+            Console.WriteLine("Get Villas");
             _logger.LogInformation("Get All Villas Values");
             _response.StatusCode = System.Net.HttpStatusCode.OK;
             _response.Result = await _repository.GetAllAsync();
             return Ok(_response);
         }
+        
         [HttpGet("{id:int}" , Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetVilla(int? id)
         {
+            Console.WriteLine("Get Villa Id Called");
             if (id == null)
             {
                 _response.StatusCode = System.Net.HttpStatusCode.BadRequest;
@@ -59,6 +61,7 @@ namespace MagicVilla_VillaApi.Controllers
             return Ok(_response);
         }
         // start from here ->
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -79,10 +82,12 @@ namespace MagicVilla_VillaApi.Controllers
             _logger.LogInformation($"Create Villa {lastId}");
             return CreatedAtRoute("GetVilla", new { id = lastId }, _response);
         }
+        [Authorize]
         [HttpDelete("{id:int}" , Name = "DeleteVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> DeleteVilla(int? id)
         {
             if (id == 0 || id == null)
@@ -97,12 +102,15 @@ namespace MagicVilla_VillaApi.Controllers
                 return NotFound(); // 404 not 
             }
             await _repository.DeleteAsync(villa);
-            return NoContent();
+            // return NoContent(); cancelled cuz of the web application needed the response delete service.
+            return Ok(_response);
         }
+        [Authorize]
         [HttpPut("{id:int}", Name = "UpdateVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> UpdateVilla(int? id, [FromBody] VillaUpdateDto villa)
         {
             if (id == 0 || id == null || id != villa.Id)
@@ -116,13 +124,11 @@ namespace MagicVilla_VillaApi.Controllers
                 _response.PopulateOnFail(System.Net.HttpStatusCode.NotFound);
                 return NotFound(_response); // 404 <-
             }
-            //vill = _mapper.Map<Villa>(villa);
-            //vill.DateUpdated = DateTime.Now;
-            //_dbContext.Villas.Update(vill);
-            //await _dbContext.SaveChangesAsync();
             vill = _mapper.Map<Villa>(villa);
             await _repository.Update(vill);
-            return NoContent();
+            // return NoContent(); cancelled cuz of the web application needed the response update service.
+            return Ok(_response);
         }
+
     }
 }

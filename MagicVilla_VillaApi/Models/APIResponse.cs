@@ -8,11 +8,30 @@ namespace MagicVilla_VillaApi.Models
         public HttpStatusCode StatusCode { get; set; }
         public bool IsSuccess { get; set; } = true;
         public object? Result { get; set; }
-        public List<string>? Errors { get; set; }
-        public void PopulateOnFail(HttpStatusCode statusCode)
+        List<string>? _errors;
+        public List<string> Errors
+        {
+            get
+            {
+                if (_errors == null)
+                {
+                    _errors = new List<string>();
+                }
+                return _errors;
+            }
+            set
+            {
+                _errors = value;
+            }
+        }
+        public void PopulateOnFail(HttpStatusCode statusCode , List<string>? errors = null)
         {
             StatusCode = statusCode;
             IsSuccess = false;
+            if (errors != null)
+            {
+                Errors = errors;
+            }
         }
         public void PopulateOnSuccess(HttpStatusCode statusCode , object? result)
         {

@@ -1,0 +1,91 @@
+﻿@model MagicVilla_Web.Dto.LoginRequestDto
+@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    .login-section {
+        min-height: calc(100vh - 150px); /* adjusts for navbar/footer if any */
+        background-size: cover;
+        padding: 40px 15px;
+    }
+
+    .login-box {
+        backdrop-filter: blur(6px);
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        width: 100%;
+        max-width: 400px;
+        color: white;
+    }
+
+    .login-box h3 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: 600;
+        color: white;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 10px 12px;
+    }
+
+    .btn-primary {
+        border-radius: 10px;
+        padding: 10px;
+        font-weight: 500;
+    }
+
+    a {
+        color: #0d6efd;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+</style>
+
+<div class="login-section d-flex justify-content-center align-items-center" style="background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('@Url.Content("~/Images/login-img.jpg")') no-repeat center center;">
+    <div class="login-box">
+        <h3>Welcome Back</h3>
+        <form asp-action="Login">
+            <div class="row p-3">
+                <div class="col-12">
+                    <label asp-for="UserName" class="text-light"></label>
+                </div>
+                <div class="col-12">
+                    <input asp-for="UserName" class="form-control" type="text" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row p-3">
+                <div class="col-12">
+                    <label asp-for="Password" class="text-light"></label>
+                </div>
+                <div class="col-12">
+                    <input asp-for="Password" class="form-control" type="password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <a href="#" class="text-decoration-none">Forgot password?</a>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <p class="text-center mt-3 mb-0">
+                Don’t have an account? <a asp-action="Register" class="col-5 m-1 text-decoration-none">Register</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

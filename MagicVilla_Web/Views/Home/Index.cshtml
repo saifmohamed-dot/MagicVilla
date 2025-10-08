@@ -1,0 +1,90 @@
+﻿@model IEnumerable<MagicVilla_Web.Dto.VillaDto>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    /* Hero Styles Start */
+    .hero {
+        height: 100vh; /* full screen height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        position: relative;
+    }
+
+    /* optional dark overlay */
+    .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1; /* above overlay */
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        margin: 0;
+    }
+    /* Hero Styles End */
+    .my-card {
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* base shadow */
+    }
+
+    .my-card:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); /* stronger shadow */
+        transform: translateY(-2px); /* optional: slight lift effect */
+    }
+</style>
+<section class="hero" style="background: url('@Url.Content("~/Images/homepageimg.jpg")') no-repeat center center/cover; height: 100vh;">
+    <div class="hero-content">
+        <h1>Welcome to VStore</h1>
+        <p>Find Your Dream Villa</p>
+    </div>
+</section>
+<br />
+
+<div class="container py-4">
+    <div class="row g-4">
+        @foreach(var v in Model)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 my-card" style="cursor:pointer;">
+                    <img src="~/Images/@v.ImageUrl" class="card-img-top" alt="Image 1" style="height:250px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@v.Name</h5>
+                        <p class="card-text">@v.Details</p>
+                        <div style="display:flex;justify-content:space-around">
+                            <span class="card-text" style="color:green;">Rate : @v.Rate</span>
+                            <span class="card-text" style="color:lightslategrey;">Occupancy : @v.Occupancy</span>
+                        </div>
+                        
+                    </div>
+                    <div class="crd-footer" style="
+                                    display: flex;
+                                    justify-content: space-around;
+                                    align-items: center;
+                                    padding: 5;
+                                    padding: 5%;
+                             ">
+                        <div class="btn btn-success" style="width:40%">
+                            View
+                        </div>
+                        <div class="btn btn-secondary" style="width:40%">
+                            Buy
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

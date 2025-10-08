@@ -1,0 +1,46 @@
+﻿@model MagicVilla_Web.ViewModels.VillaNumberUpdateVM
+<form asp-action="UpdateVillaNumber">
+    <div class="container border p-3">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="text-success">Update Villa Number</h1>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-2">
+                <label asp-for="villaNumberUpdateDto.Id" class="text-success"></label>
+            </div>
+            <div class="col-10">
+                <input asp-for="villaNumberUpdateDto.Id" class="form-control" />
+                <span asp-validation-for="villaNumberUpdateDto.Id" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-2">
+                <label asp-for="villaNumberUpdateDto.VillaId" class="text-success"></label>
+            </div>
+            <div class="col-10">
+                <select asp-for="villaNumberUpdateDto.VillaId" class="form-select" asp-items="@Model.VillaList">
+                    <option disabled> Select Villa </option>
+                </select>
+                <span asp-validation-for="villaNumberUpdateDto.VillaId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-2">
+                <label asp-for="villaNumberUpdateDto.SpecialDetail" class="text-success"></label>
+            </div>
+            <div class="col-10">
+                <input asp-for="villaNumberUpdateDto.SpecialDetail" class="form-control" />
+                <span asp-validation-for="villaNumberUpdateDto.SpecialDetail" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row p-2 justify-content-around">
+            <a asp-action="Index" class="btn btn-primary col-5 mr-1">Back To List</a>
+            <input type="submit" value="Update" class="btn btn-success col-5" />
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

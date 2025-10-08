@@ -9,7 +9,9 @@ namespace MagicVilla_VillaApi.DataStore
             :base(option) 
         { 
         }
+        public DbSet<LocalUser> Users { get; set; }
         public DbSet<Villa> Villas { get; set; }
+        public DbSet<VillaNumber> VillaNumbers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Villa>().HasData(

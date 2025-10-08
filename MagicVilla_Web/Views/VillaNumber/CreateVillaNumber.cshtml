@@ -1,0 +1,46 @@
+﻿@model MagicVilla_Web.ViewModels.VillaNumberCreateVM
+<form asp-action="CreateVillaNumber">
+    <div class="container border p-3">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="text-success">Describe The Villa</h1>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-2">
+                <label asp-for="villaNumberCreateDto.Id" class="text-success"></label>
+            </div>
+            <div class="col-10">
+                <input asp-for="villaNumberCreateDto.Id" class="form-control" />
+                <span asp-validation-for="villaNumberCreateDto.Id" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-2">
+                <label asp-for="villaNumberCreateDto.VillaId" class="text-success"></label>
+            </div>
+            <div class="col-10">
+                <select asp-for="villaNumberCreateDto.VillaId" class="form-select" asp-items="@Model.VillaList">
+                    <option disabled>Select Villa </option>
+                </select>
+                <span asp-validation-for="villaNumberCreateDto.VillaId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-2">
+                <label asp-for="villaNumberCreateDto.SpecialDetail" class="text-success"></label>
+            </div>
+            <div class="col-10">
+                <input asp-for="villaNumberCreateDto.SpecialDetail" class="form-control" />
+                <span asp-validation-for="villaNumberCreateDto.SpecialDetail" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row p-2 justify-content-around">
+            <a asp-action="Index" class="btn btn-primary col-5 mr-1">Back To List</a>
+            <input type="submit" value="Create" class="btn btn-success col-5" />
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

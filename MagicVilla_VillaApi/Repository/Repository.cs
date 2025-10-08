@@ -25,21 +25,45 @@ namespace MagicVilla_VillaApi.Repository
             await SaveAsync();
         }
 
-        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, string? includeProperties = null)
         {
-            return await _set!.Where(predicate).ToListAsync();
+            IQueryable<T> query = _set!;
+            if (includeProperties != null)
+            {
+                foreach (var property in includeProperties.Split(',' , StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
+            return await query.Where(predicate).ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(string? includeProperties)
         {
-            return await _set!.ToListAsync();
+            IQueryable<T> query = _set!;
+            if (includeProperties != null)
+            {
+                foreach (var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
+            return await query.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id , bool tracking = true)
+        public async Task<T> GetByIdAsync(int id , bool tracking = true , string? includeProperties = null)
         {
+            IQueryable<T> query = _set!;
+            if (includeProperties != null)
+            {
+                foreach (var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
             if (tracking)
-                return await _set!.Where(e => e.Id == id).FirstOrDefaultAsync();
-            return await _set!.AsNoTracking().Where(e => e.Id == id).FirstOrDefaultAsync();
+                return await query.Where(e => e.Id == id).FirstOrDefaultAsync();
+            return await query.AsNoTracking().Where(e => e.Id == id).FirstOrDefaultAsync();
         }
         public async Task SaveAsync()
         {
