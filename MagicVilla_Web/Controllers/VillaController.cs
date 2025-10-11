@@ -18,16 +18,33 @@ namespace MagicVilla_Web.Controllers
             _service = service;
             _mapper = mapper;
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Index()
         {
             List<VillaDto>? list = new();
+            // TODO : do not forget to specify the number of villa that will apear in the index home paage 
             APIResponse response = await _service.GetAllAsync<APIResponse>();
             if (response != null && response.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<VillaDto>>(Convert.ToString(response.Result)!);
             }
             return View(list);
+        }
+        public async Task<IActionResult> BrowsVilla(int currPage)
+        {
+            List<VillaDto>? list = new();
+            // TODO : do not forget to specify the number of villa that will apear in the index home paage 
+            APIResponse response = await _service.GetAllAsync<APIResponse>(currPage, Util.CommonValues.PageSize);
+            if (response != null && response.IsSuccess)
+            {
+                list = JsonConvert.DeserializeObject<List<VillaDto>>(Convert.ToString(response.Result)!);
+            }
+            TempData["PageNo"] = currPage;
+            return View(list);
+        }
+        public async Task<IActionResult> VillaPreview()
+        {
+            return View();
         }
         [Authorize(Roles = "Admin")]
         public IActionResult CreateVilla()

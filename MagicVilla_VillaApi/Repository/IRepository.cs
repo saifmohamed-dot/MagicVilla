@@ -7,6 +7,8 @@ namespace MagicVilla_VillaApi.Repository
     {
         // return all rows unconditionally ->
         Task<IEnumerable<T>> GetAllAsync(string? includeProperties = null);
+        // return all rows for this current page ->
+        Task<IEnumerable<T>> GetAllAsync(int pageNo , int pageSize , bool tracking = true , string? includeProperties = null);
         // return all rows that meet condition ->
         Task<IEnumerable<T>> FindAllAsync(Expression<Func<T , bool>> predicate , string? includeProperties = null);
         // find a Row by id -> 

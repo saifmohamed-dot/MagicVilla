@@ -62,5 +62,15 @@ namespace MagicVilla_Web.Services
                 Token = authToken ?? string.Empty
             });
         }
+
+        public Task<U> GetAllAsync<U>(int pageNo, int pageSize, string? authToken = null)
+        {
+            return SendAsync<U>(new APIRequest()
+            {
+                aPIMethod = StaticUtil.APIMethod.GET,
+                Url = _baseUrl + $"/api/VillaApi?pageNo={pageNo}&pageSize={pageSize}",
+                Token = authToken ?? string.Empty
+            });
+        }
     }
 }

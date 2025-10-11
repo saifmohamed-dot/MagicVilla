@@ -34,6 +34,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="VillaNumber" asp-action="Index"> VillaNumber </a>
                         </li>
+                        @if (httpAcc.HttpContext.User.Identity.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">My Villas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action=""> Appointments </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action=""> WishList </a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav flex-grow-1 justify-content-end column-gap-1">
                         @if (string.IsNullOrEmpty(httpAcc.HttpContext.Session.GetString(StaticUtil.TokenName)))
@@ -47,9 +59,11 @@
                         }
                         else
                         {
+                            
                             <li class="nav-item">
                                 <a class="btn btn-outline-secondary" asp-area="" asp-controller="User" asp-action="Logout"> Logout </a>
                             </li>
+                            
                         }
                     </ul>
                 </div>
@@ -73,5 +87,6 @@
     
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Styles" , required:false)
 </body>
 </html>

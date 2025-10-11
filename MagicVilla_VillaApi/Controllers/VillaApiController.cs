@@ -28,14 +28,21 @@ namespace MagicVilla_VillaApi.Controllers
         
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> GetVillas()
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery] int? pageNo , [FromQuery] int? pageSize)
         {
-            Console.WriteLine("Get Villas");
-            _logger.LogInformation("Get All Villas Values");
             _response.StatusCode = System.Net.HttpStatusCode.OK;
-            _response.Result = await _repository.GetAllAsync();
+            if (pageNo == null || pageSize == null)
+            {
+                _response.Result = await _repository.GetAllAsync(0 , Util.CommonValues.IndexPreviewSize,false);
+            }
+            else
+            {
+                _response.Result = await _repository.GetAllAsync(pageNo.Value, pageSize.Value, false);
+            }
             return Ok(_response);
         }
+        
         
         [HttpGet("{id:int}" , Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]

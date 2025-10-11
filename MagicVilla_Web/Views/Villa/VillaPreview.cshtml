@@ -1,0 +1,82 @@
+﻿
+
+<div class="container mt-2 p-4">
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    This is a simple Bootstrap 5 modal example.
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <h1 class="mb-4 fw-bold">Villa Photos </h1>
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/Images/v1.jpg" class="d-block w-100" alt="..." style="width:1300px;height:600px;">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Images/v2.jpg" class="d-block w-100" alt="..." style="width:1300px;height:600px;">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Images/v3.jpg" class="d-block w-100" alt="..." style="width:1300px;height:600px;">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div class="container my-5">
+        <div class="row g-4">
+            <!-- Product Image -->
+            <div class="col-md-5">
+                <h1 class="bg-body-secondary">card</h1>
+                <h1 class="text-bg-info">card</h1>
+                <h1 class="text-bg-danger">card</h1>
+            </div>
+
+            <!-- Product Details -->
+            <div class="col-md-7">
+                <h2 class="fw-bold">Luxury Villa</h2>
+                <p class="text-muted">Category: Beachfront</p>
+                <p>
+                    Experience a luxurious stay with ocean views, a private pool, and modern design.
+                    Perfect for families and couples seeking relaxation.
+                </p>
+
+                <h4 class="text-success mb-3">$1,250,000</h4>
+
+                <div class="d-flex gap-3">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Ask for appointment</button>
+                    <button class="btn btn-outline-secondary">Add to Wishlist</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

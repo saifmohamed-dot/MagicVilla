@@ -51,19 +51,38 @@ namespace MagicVilla_VillaApi.Repository
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id , bool tracking = true , string? includeProperties = null)
+        public async Task<IEnumerable<T>> GetAllAsync(int pageNo, int pageSize, bool tracking , string? includeProperties = null)
         {
             IQueryable<T> query = _set!;
-            if (includeProperties != null)
+            if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(property);
                 }
             }
-            if (tracking)
-                return await query.Where(e => e.Id == id).FirstOrDefaultAsync();
-            return await query.AsNoTracking().Where(e => e.Id == id).FirstOrDefaultAsync();
+            if(!tracking)
+            {
+                query = query.AsNoTracking();
+            }
+            return await query.Skip(pageNo * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public async Task<T> GetByIdAsync(int id , bool tracking = true , string? includeProperties = null)
+        {
+            IQueryable<T> query = _set!;
+            if (!string.IsNullOrEmpty(includeProperties)) 
+            {
+                foreach (var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
+            if(!tracking)
+            {
+                query = query.AsNoTracking();
+            }
+           return await query.Where(e => e.Id == id).FirstOrDefaultAsync();
         }
         public async Task SaveAsync()
         {
