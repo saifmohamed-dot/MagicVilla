@@ -71,9 +71,9 @@
                                                 padding: 5%;
                 
                                          ">
-                            <div class="btn btn-success" style="width:70%;">
+                            <a asp-action="VillaPreview" asp-controller="Villa" class="btn btn-success" style="width:70%">
                                 View
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
             }
             else
             {
-                <a asp-action="BrowsVilla" asp-controller="Villa" asp-route-currPage="0" class="btn btn-info">Review Villas</a>
+                <a asp-action="BrowsVilla" asp-controller="Villa" asp-route-currPage="0" class="btn btn-info">Re-view Villas</a>
             }
         </div>
     </div>

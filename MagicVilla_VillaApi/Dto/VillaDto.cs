@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MagicVilla_VillaApi.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace MagicVilla_VillaApi.Dto
 {
@@ -6,6 +7,8 @@ namespace MagicVilla_VillaApi.Dto
     {
         [Required(ErrorMessage = "ID For Villa Can't be Empty")]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Owner ID For Villa Can't be Empty")]
+        public int OwnerId { get; set; }
         [Required(ErrorMessage = "Name For Villa Can't be Empty")]
         public string Name { get; set; } = string.Empty;
         [Required(ErrorMessage = "Details For Villa Can't be Empty")]
@@ -21,5 +24,10 @@ namespace MagicVilla_VillaApi.Dto
         public string ImageUrl { get; set; } = string.Empty;
         [Required(ErrorMessage = "Amentiy For Villa Can't be Empty")]
         public string Amentiy { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Price For Villa Can't be Empty")]
+        public float Price { get; set; }
+        [Required(ErrorMessage = "address For Villa Can't be Empty")]
+        public string Address { get; set; }
+        public UserDto Owner { get; set; }
     }
 }

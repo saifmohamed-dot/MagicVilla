@@ -1,0 +1,98 @@
+﻿@model MagicVilla_Web.Dto.VillaCreateDto
+
+<div class="row">
+    <div class="col text-center">
+        <h1 class="text-success">Fill Your Villa Info</h1>
+    </div>
+</div>
+<div class="row p-3">
+    <div class="col-4">
+        <div class="mb-1">
+            <label asp-for="Name" class="text-success"></label>
+        </div>
+        <div>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="mb-1">
+            <label asp-for="Price" class="text-success"></label>
+        </div>
+        <div>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="mb-1">
+            <label asp-for="Sqft" class="text-success"></label>
+        </div>
+        <div>
+            <input asp-for="Sqft" class="form-control" />
+            <span asp-validation-for="Sqft" class="text-bg-danger"></span>
+        </div>
+    </div>
+</div>
+@* Address And Base Image *@ 
+    <div class="row p-3">
+    <div class="col-8">
+        <div class="mb-1">
+            <label asp-for="Address" class="text-success"></label>
+        </div>
+        <div>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="mb-1">
+            <label asp-for="UploadedImage" class="text-success"></label>
+        </div>
+        <div>
+            <input asp-for="UploadedImage" class="form-control" type="file" />
+            <span asp-validation-for="UploadedImage" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row p-3">
+    <div class="col-12">
+        <div class="mb-1">
+            <label asp-for="Details" class="text-success"></label>
+        </div>
+        <div>
+            <textarea asp-for="Details" class="form-control"> </textarea>
+            <span asp-validation-for="Details" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row p-3">
+    <div class="col-4">
+        <div class="mb-1">
+            <label asp-for="Amentiy" class="text-success"></label>
+        </div>
+        <div>
+            <input asp-for="Amentiy" class="form-control" />
+            <span asp-validation-for="Amentiy" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="mb-1">
+            <label asp-for="Occupancy" class="text-success"></label>
+        </div>
+        <div>
+            <input asp-for="Occupancy" class="form-control" />
+            <span asp-validation-for="Occupancy" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="mb-1">
+            <label asp-for="Rate" class="text-success"></label>
+        </div>
+        <div>
+            <input asp-for="Rate" class="form-control" />
+            <span asp-validation-for="Rate" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+   

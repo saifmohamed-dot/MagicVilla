@@ -35,14 +35,20 @@
         margin: 0;
     }
     /* Hero Styles End */
-    .my-card {
+    .my-card , .f-card {
         transition: box-shadow 0.3s ease, transform 0.3s ease;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* base shadow */
+        cursor : pointer;
     }
 
-    .my-card:hover {
+    .my-card:hover , .f-card:hover {
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); /* stronger shadow */
         transform: translateY(-2px); /* optional: slight lift effect */
+    }
+    
+    .f-card:hover {
+            background-color: #1e3a8a;
+            color : white;
     }
 </style>
 <section class="hero" style="background: url('@Url.Content("~/Images/homepageimg.jpg")') no-repeat center center/cover; height: 100vh;">
@@ -52,7 +58,39 @@
     </div>
 </section>
 <br />
-
+<div class="container d-flex" style="background-color: #f5f4f48a;
+    justify-content: space-around;
+    padding: 30px;
+    margin-bottom : 50px; 
+    margin-top:50px;
+    flex-wrap:wrap;">
+    <div class="card f-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Our Job</h5>
+            <p class="card-text">Find your dream villa or list yours for sale — anytime, anywhere. Experience the easiest way to buy or sell villas with just a few clicks.</p>
+            <a class="nav-link text-info" asp-action="BrowsVilla" asp-controller="Villa">Explore</a>
+        </div>
+    </div>
+    <div class="card f-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">About Us</h5>
+            <p class="card-text">We’re dedicated to connecting villa buyers and sellers through a simple, secure, and transparent platform. Our mission is to make every property journey easy, efficient, and enjoyable.</p>
+        </div>
+    </div>
+    <div class="card f-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Contact Us</h5>
+            <p class="card-text">Share your experience and help us improve. Your feedback makes buying and selling villas smoother for everyone.</p>
+        </div>
+    </div>
+    <div class="card f-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Privacy</h5>
+            <p class="card-text">Your privacy is our priority. All your personal information and activities are protected with top-level security and never shared without your consent.</p>
+           <a class="nav-link text-info" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </div>
+</div>
 <div class="container py-4">
     <div class="row g-4">
         @foreach(var v in Model)
@@ -76,16 +114,28 @@
                                     padding: 5;
                                     padding: 5%;
                              ">
-                        <div class="btn btn-success" style="width:70%">
+                        <a asp-action ="VillaPreview" asp-controller ="Villa" class="btn btn-success" style="width:70%">
                             View
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
         }
     </div>
-    <div style="display:flex;justify-content:center;" class="mt-4">
-        <a asp-action="BrowsVilla" asp-controller="Villa" class="btn btn-secondary">More Villas <span>----></span></a>
-    </div>
-    
 </div>
+<div class="container-fluid" style="margin-top:100px;">
+    <div class="card mb-4 border-0 shadow-lg rounded-3">
+        <div class="card-body p-5 text-center">
+            <h3 class="card-title fw-bold mb-3">List Your Villa & Start Trading Today</h3>
+            <p class="card-text text-muted fs-5">
+                Upload your villa details, add high-quality photos, and set your price — it only takes a few minutes.
+                Once published, your property becomes visible to thousands of buyers ready to make an offer.
+                Manage inquiries, schedule viewings, and close deals easily — all in one place.
+            </p>
+            <a href="/Villa/Create" class="btn btn-lg mt-3 px-5" style="background-color:#1e3a8a; color:white">
+                Get Started
+            </a>
+        </div>
+    </div>
+</div>
+

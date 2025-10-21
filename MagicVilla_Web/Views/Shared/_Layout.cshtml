@@ -34,7 +34,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="VillaNumber" asp-action="Index"> VillaNumber </a>
                         </li>
-                        @if (httpAcc.HttpContext.User.Identity.IsAuthenticated == true)
+                        @if (httpAcc.HttpContext.User.Identity.IsAuthenticated == true && !string.IsNullOrEmpty(httpAcc.HttpContext.Session.GetString(StaticUtil.TokenName)))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">My Villas</a>

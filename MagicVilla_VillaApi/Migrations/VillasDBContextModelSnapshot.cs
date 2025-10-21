@@ -22,6 +22,30 @@ namespace MagicVilla_VillaApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("MagicVilla_VillaApi.Models.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("VillaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VillaId");
+
+                    b.ToTable("Appointments");
+                });
+
             modelBuilder.Entity("MagicVilla_VillaApi.Models.LocalUser", b =>
                 {
                     b.Property<int>("Id")
@@ -47,6 +71,32 @@ namespace MagicVilla_VillaApi.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("MagicVilla_VillaApi.Models.RequestedAppointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IsTaken")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("RequestedAppointments");
+                });
+
             modelBuilder.Entity("MagicVilla_VillaApi.Models.Villa", b =>
                 {
                     b.Property<int>("Id")
@@ -54,6 +104,10 @@ namespace MagicVilla_VillaApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Amentiy")
                         .IsRequired()
@@ -80,6 +134,12 @@ namespace MagicVilla_VillaApi.Migrations
                     b.Property<int>("Occupancy")
                         .HasColumnType("int");
 
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
                     b.Property<double>("Rate")
                         .HasColumnType("float");
 
@@ -88,12 +148,15 @@ namespace MagicVilla_VillaApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OwnerId");
+
                     b.ToTable("Villas");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
+                            Address = "Cairo Egypt",
                             Amentiy = "very good",
                             DateCreated = new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateUpdated = new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -101,12 +164,15 @@ namespace MagicVilla_VillaApi.Migrations
                             ImageUrl = "https://localhost/dev/tech",
                             Name = "VillaDia",
                             Occupancy = 5,
+                            OwnerId = 1,
+                            Price = 100.2f,
                             Rate = 4.2999999999999998,
                             Sqft = 3003
                         },
                         new
                         {
                             Id = 2,
+                            Address = "Cairo Egypt",
                             Amentiy = "meduim",
                             DateCreated = new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateUpdated = new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -114,12 +180,15 @@ namespace MagicVilla_VillaApi.Migrations
                             ImageUrl = "https://localhost/dev/tech",
                             Name = "VillaCont",
                             Occupancy = 3,
+                            OwnerId = 1,
+                            Price = 100.2f,
                             Rate = 3.3999999999999999,
                             Sqft = 2500
                         },
                         new
                         {
                             Id = 3,
+                            Address = "Cairo Egypt",
                             Amentiy = "bad",
                             DateCreated = new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateUpdated = new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -127,12 +196,15 @@ namespace MagicVilla_VillaApi.Migrations
                             ImageUrl = "https://localhost/dev/tech",
                             Name = "TalaVilla",
                             Occupancy = 5,
+                            OwnerId = 1,
+                            Price = 100.2f,
                             Rate = 2.1000000000000001,
                             Sqft = 1500
                         },
                         new
                         {
                             Id = 4,
+                            Address = "Cairo Egypt",
                             Amentiy = "very Smoked",
                             DateCreated = new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateUpdated = new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -140,6 +212,8 @@ namespace MagicVilla_VillaApi.Migrations
                             ImageUrl = "https://localhost/dev/tech",
                             Name = "CockedVilla",
                             Occupancy = 5,
+                            OwnerId = 1,
+                            Price = 100.2f,
                             Rate = 3.2999999999999998,
                             Sqft = 1000
                         });
@@ -170,6 +244,69 @@ namespace MagicVilla_VillaApi.Migrations
                     b.ToTable("VillaNumbers");
                 });
 
+            modelBuilder.Entity("MagicVilla_VillaApi.Models.VillaPreviewImages", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VillaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VillaId");
+
+                    b.ToTable("VillaPreviewImages");
+                });
+
+            modelBuilder.Entity("MagicVilla_VillaApi.Models.Appointment", b =>
+                {
+                    b.HasOne("MagicVilla_VillaApi.Models.Villa", "Villa")
+                        .WithMany("Appointments")
+                        .HasForeignKey("VillaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Villa");
+                });
+
+            modelBuilder.Entity("MagicVilla_VillaApi.Models.RequestedAppointment", b =>
+                {
+                    b.HasOne("MagicVilla_VillaApi.Models.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MagicVilla_VillaApi.Models.LocalUser", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("MagicVilla_VillaApi.Models.Villa", b =>
+                {
+                    b.HasOne("MagicVilla_VillaApi.Models.LocalUser", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("MagicVilla_VillaApi.Models.VillaNumber", b =>
                 {
                     b.HasOne("MagicVilla_VillaApi.Models.Villa", "Villa")
@@ -179,6 +316,22 @@ namespace MagicVilla_VillaApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Villa");
+                });
+
+            modelBuilder.Entity("MagicVilla_VillaApi.Models.VillaPreviewImages", b =>
+                {
+                    b.HasOne("MagicVilla_VillaApi.Models.Villa", null)
+                        .WithMany("Images")
+                        .HasForeignKey("VillaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MagicVilla_VillaApi.Models.Villa", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

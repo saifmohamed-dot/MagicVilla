@@ -16,6 +16,16 @@ namespace MagicVilla_VillaApi
             CreateMap<VillaNumber, VillaNumberUpdateDto>().ReverseMap();
             CreateMap<VillaNumberDto , VillaNumberUpdateDto>().ReverseMap();
             CreateMap<UserDto, LocalUser>().ReverseMap();
+            CreateMap<AppointmentDto, Appointment>().ReverseMap();
+            CreateMap<AppointmentCreateDto, Appointment>().ReverseMap();
+            CreateMap<RequestedAppointment, RequestedAppointmentDto>().ReverseMap();
+            CreateMap<RequestedAppointment , RequestedAppointmentCreateDto>().ReverseMap();
+            CreateMap<VillaImagesPreviewCreateDto, VillaPreviewImages>().ReverseMap();
+            CreateMap<VillaPreviewDto, Villa>().ReverseMap();
+            CreateMap<VillaPreviewImages, VillaImagesPreviewDto>().ReverseMap();
+            CreateMap<VillaPreviewRequestedAppointmentsDto, RequestedAppointment>().ReverseMap();
+            CreateMap<VillaPreviewAppointmentDto, Appointment>().ReverseMap();
+            CreateMap<VillaPreviewImages, VillaPreviewImageCreateDto>().ReverseMap();
         }
     }
 }

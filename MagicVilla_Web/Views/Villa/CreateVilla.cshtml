@@ -1,77 +1,10 @@
 ﻿@model MagicVilla_Web.Dto.VillaCreateDto
-<form asp-action="CreateVilla">
-    <div class="container border p-3">
-        <div class="row">
-            <div class="col text-center">
-                <h1 class="text-success">Describe The Villa</h1>
-            </div>
-        </div>
-        <div class="row p-3">
-            <div class="col-2">
-                <label asp-for="Name" class="text-success"></label>
-            </div>
-            <div class="col-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row p-3">
-            <div class="col-2">
-                <label asp-for="Details" class="text-success"></label>
-            </div>
-            <div class="col-10">
-                <input asp-for="Details" class="form-control" />
-                <span asp-validation-for="Details" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row p-3">
-            <div class="col-2">
-                <label asp-for="Rate" class="text-success"></label>
-            </div>
-            <div class="col-10">
-                <input asp-for="Rate" class="form-control" />
-                <span asp-validation-for="Rate" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row p-3">
-            <div class="col-2">
-                <label asp-for="Sqft" class="text-success"></label>
-            </div>
-            <div class="col-10">
-                <input asp-for="Sqft" class="form-control" />
-                <span asp-validation-for="Sqft" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row p-3">
-            <div class="col-2">
-                <label asp-for="Occupancy" class="text-success"></label>
-            </div>
-            <div class="col-10">
-                <input asp-for="Occupancy" class="form-control" />
-                <span asp-validation-for="Occupancy" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row p-3">
-            <div class="col-2">
-                <label asp-for="ImageUrl" class="text-success"></label>
-            </div>
-            <div class="col-10">
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row p-3">
-            <div class="col-2">
-                <label asp-for="Amentiy" class="text-success"></label>
-            </div>
-            <div class="col-10">
-                <input asp-for="Amentiy" class="form-control" />
-                <span asp-validation-for="Amentiy" class="text-danger"></span>
-            </div>
-        </div>
+<form asp-action="CreateVilla" enctype="multipart/form-data">
+    <div class="container p-3">
+        <partial name="_SubmitVilla" />
         <div class="row p-2 justify-content-around">
-            <a asp-action="Index" class="btn btn-primary col-5 mr-1">Back To List</a>
-            <input type="submit" value="Create" class="btn btn-success col-5" />
+            <a asp-action="Index" class="btn btn-danger col-5 mr-1">Cancel</a>
+            <input type="submit" value="Add To Market" class="btn btn-success col-5" />
         </div>
     </div>
 </form>

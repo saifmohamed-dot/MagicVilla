@@ -1,0 +1,11 @@
+﻿@model MagicVilla_Web.Dto.VillaCreateDto
+
+<form asp-action="SellVilla" enctype="multipart/form-data">
+    <div class="container border p-3">
+        <partial name="_SubmitVilla" />
+        <div class="row p-2 justify-content-around">
+            <a asp-action="Index" class="btn btn-danger col-5 mr-1">Cancel</a>
+            <input type="submit" value="Add To Market" class="btn btn-success col-5" />
+        </div>
+    </div>
+</form>

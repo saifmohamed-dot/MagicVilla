@@ -1,5 +1,6 @@
 ﻿using MagicVilla_Web.Dto;
 using MagicVilla_Web.Models;
+using MagicVilla_Web.ViewModels;
 
 namespace MagicVilla_Web.Services
 {
@@ -18,6 +19,16 @@ namespace MagicVilla_Web.Services
                 aPIMethod = StaticUtil.APIMethod.POST,
                 Data = dto,
                 Url = _baseUrl + "/api/VillaApi/",
+                Token = authToken ?? string.Empty
+            });
+        }
+        public Task<U> CreateAsync<U>(VillaAppointmentAndImagesCreateVM vm , string? authToken = null)
+        {
+            return SendAsync<U>(new APIRequest()
+            {
+                aPIMethod = StaticUtil.APIMethod.POST,
+                Data = vm,
+                Url = _baseUrl + "/api/VillaApi/ContinueSubmitting",
                 Token = authToken ?? string.Empty
             });
         }
@@ -51,7 +62,15 @@ namespace MagicVilla_Web.Services
                 Token = authToken ?? string.Empty
             });
         }
-
+        public Task<U> GetVillaPreviewById<U>(int id , string? authToken = null)
+        {
+            return SendAsync<U>(new APIRequest()
+            {
+                aPIMethod = StaticUtil.APIMethod.GET,
+                Url = _baseUrl + $"/api/VillaApi/Vpreview/{id}",
+                Token = authToken ?? string.Empty
+            });
+        }
         public Task<U> UpdateAsync<U>(int id , VillaUpdateDto dto, string? authToken = null)
         {
             return SendAsync<U>(new APIRequest()

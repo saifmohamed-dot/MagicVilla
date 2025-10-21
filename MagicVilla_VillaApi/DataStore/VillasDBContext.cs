@@ -12,6 +12,8 @@ namespace MagicVilla_VillaApi.DataStore
         public DbSet<LocalUser> Users { get; set; }
         public DbSet<Villa> Villas { get; set; }
         public DbSet<VillaNumber> VillaNumbers { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<RequestedAppointment> RequestedAppointments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Villa>().HasData(

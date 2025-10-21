@@ -1,5 +1,5 @@
-﻿
-
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpAcc
+@model MagicVilla_Web.Dto.VillaPreviewDto
 <div class="container mt-2 p-4">
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -12,7 +12,12 @@
                 </div>
 
                 <div class="modal-body">
-                    This is a simple Bootstrap 5 modal example.
+                    <h1 class="bg-body-secondary">card</h1>
+                    <h1 class="text-bg-info">card</h1>
+                    <h1 class="text-bg-danger">card</h1>
+                    <h1 class="bg-body-secondary">card</h1>
+                    <h1 class="text-bg-info">card</h1>
+                    <h1 class="text-bg-danger">card</h1>
                 </div>
 
                 <div class="modal-footer">
@@ -69,7 +74,7 @@
                 </p>
 
                 <h4 class="text-success mb-3">$1,250,000</h4>
-
+                
                 <div class="d-flex gap-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Ask for appointment</button>
                     <button class="btn btn-outline-secondary">Add to Wishlist</button>

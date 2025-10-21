@@ -3,8 +3,10 @@ using MagicVilla_VillaApi.DataStore;
 using MagicVilla_VillaApi.Dto;
 using MagicVilla_VillaApi.Models;
 using MagicVilla_VillaApi.Repository;
+using MagicVilla_VillaApi.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace MagicVilla_VillaApi.Controllers
 {
@@ -15,15 +17,18 @@ namespace MagicVilla_VillaApi.Controllers
         readonly ILogger<VillaApiController> _logger;
         readonly IMapper _mapper;
         readonly IVillaRepository _repository;
+        readonly IRequestedAppointmentRepository _requestedAppointmentRepository;
         readonly APIResponse _response;
         public VillaApiController(ILogger<VillaApiController> logger 
             , IMapper mapper
-            , IVillaRepository repository)
+            , IVillaRepository repository
+            , IRequestedAppointmentRepository requestedAppointmentRepository)
         {
             _logger = logger;
             _mapper = mapper;
             _repository = repository;
             _response = new();
+            _requestedAppointmentRepository = requestedAppointmentRepository;
         }
         
         [HttpGet]
@@ -34,11 +39,11 @@ namespace MagicVilla_VillaApi.Controllers
             _response.StatusCode = System.Net.HttpStatusCode.OK;
             if (pageNo == null || pageSize == null)
             {
-                _response.Result = await _repository.GetAllAsync(0 , Util.CommonValues.IndexPreviewSize,false);
+                _response.Result = _mapper.Map<List<VillaDto>>(await _repository.GetAllAsync(0 , Util.CommonValues.IndexPreviewSize,false , includeProperties:"Owner"));
             }
             else
             {
-                _response.Result = await _repository.GetAllAsync(pageNo.Value, pageSize.Value, false);
+                _response.Result = _mapper.Map<List<VillaDto>>(await _repository.GetAllAsync(pageNo.Value, pageSize.Value, false , includeProperties:"Owner"));
             }
             return Ok(_response);
         }
@@ -67,6 +72,27 @@ namespace MagicVilla_VillaApi.Controllers
             _response.Result = _mapper.Map<VillaDto>(value);
             return Ok(_response);
         }
+        [Authorize]
+        [HttpGet("Vpreview/{id:int}")]
+        public async Task<ActionResult<APIResponse>> GetVillaPreview(int? id)
+        {
+            if (id == null)
+            {
+                _response.PopulateOnFail(System.Net.HttpStatusCode.BadRequest, ["ID Can not Be Null"]);
+                return BadRequest(_response);
+            }
+            string? primarySuid = User.FindFirst(ClaimTypes.PrimarySid)?.Value;
+            Villa? v = await _repository.GetVillaPreviewQuery(id.Value, Convert.ToInt32(primarySuid));
+            if(v == null)
+            {
+                _response.PopulateOnFail(System.Net.HttpStatusCode.NotFound, ["Villa Not Found"]);
+                return NotFound(_response);
+            }
+            // TODO : Include The Requested Appointment.
+            VillaPreviewDto preview = _mapper.Map<VillaPreviewDto>(v);
+            _response.PopulateOnSuccess(System.Net.HttpStatusCode.OK, preview);
+            return Ok(_response);
+        }
         // start from here ->
         [Authorize]
         [HttpPost]
@@ -85,9 +111,10 @@ namespace MagicVilla_VillaApi.Controllers
             vi.DateUpdated = DateTime.Now;
             var lastId = await _repository.CreateAsync(vi);
             vi.Id = lastId;
-            _response.PopulateOnSuccess(System.Net.HttpStatusCode.Created, vi);
+            _response.PopulateOnSuccess(System.Net.HttpStatusCode.Created, vi.Id);
             _logger.LogInformation($"Create Villa {lastId}");
-            return CreatedAtRoute("GetVilla", new { id = lastId }, _response);
+            //return CreatedAtRoute("GetVilla", new { id = lastId }, _response); we need the villa Id 
+            return Ok(_response);
         }
         [Authorize]
         [HttpDelete("{id:int}" , Name = "DeleteVilla")]
@@ -135,6 +162,38 @@ namespace MagicVilla_VillaApi.Controllers
             await _repository.Update(vill);
             // return NoContent(); cancelled cuz of the web application needed the response update service.
             return Ok(_response);
+        }
+        [Authorize]
+        [HttpPost("ContinueSubmitting")]
+        public async Task<ActionResult<APIResponse>> AddRelativeDataToVilla([FromBody] VillaAppointmentAndImagesCreateVM vm)
+        {
+            if(vm == null)
+            {
+                _response.PopulateOnFail(System.Net.HttpStatusCode.BadRequest, ["Create dto is null"]);
+                return BadRequest(_response);
+            }
+            if(vm.ImageCreateDtos == null || vm.ImageCreateDtos.Count() != 3)
+            {
+                _response.PopulateOnFail(System.Net.HttpStatusCode.BadRequest, ["Only Three Images"]);
+                return BadRequest(_response);
+            }
+            if (vm.Appointments == null || vm.Appointments.Count() == 0)
+            {
+                _response.PopulateOnFail(System.Net.HttpStatusCode.BadRequest, ["At Least One Appointment"]);
+                return BadRequest(_response);
+            }
+            // TODO : don't forget to check if the userId is the owner of the villa that you need to do this operation on.
+            try
+            {
+                await _repository.AddRelativeDataToVillaCreateAsync(vm);
+                _response.PopulateOnSuccess(System.Net.HttpStatusCode.Created, $"Relative Created For VillaId : {vm.Appointments[0].VillaId}");
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.PopulateOnFail(System.Net.HttpStatusCode.BadRequest, [ex.Message]);
+                return BadRequest(_response); 
+            }
         }
 
     }

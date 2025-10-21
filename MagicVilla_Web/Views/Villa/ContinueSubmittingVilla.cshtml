@@ -1,0 +1,155 @@
+﻿@model MagicVilla_Web.ViewModels.VillaAppointmentAndImagesCreateVM
+
+<style>
+    .selected-appointment , .selected-image {
+        background-color: #f5f4f4;
+        color : black;
+        border-radius : 8px;
+        display:flex;
+        justify-content:space-between;
+        width:fit-content;
+        padding:10px;
+        align-items : center;
+        margin-bottom : 10px;
+        column-gap : 1%;
+    }
+</style>
+<div class="alert alert-info m-5" role="alert">
+    <h5>Almost There , Just A Few More Steps .</h5>
+</div>
+
+<div class="container">
+    <form id="myForm">
+        @Html.AntiForgeryToken()
+    </form>
+    <span id="errors" class="text-danger"></span>
+    <div class="row">
+        <h4> Upload Three Images Only For Preview !</h4>
+        <button class="btn btn-outline-primary m-2 mb-3" id="add-image" > Add Photos + </button>
+        <input type = "file" hidden id="up-image"/>
+    </div>
+    <div id="selected-images">
+    </div>
+    <br />
+    <div class="row">
+        <h4> Meet Clients On !</h4>
+        <div class="mb-3" style="width:30%;">
+            <input asp-for="Appointments" type="datetime-local" class="form-control" id="picker"/>
+        </div>
+    </div>
+    <div id="selected-appointments">
+    </div>
+    <div style="display:flex;justify-content:end;">
+        <button class="btn btn-outline-success" id="sub-btn">Submit</button>
+    </div>
+</div>
+
+<script>
+    var remainingImages = 3;
+    var cnt = 0;
+    var submitButton = document.getElementById('sub-btn');
+    var form = new FormData();
+    var fileMap = new Map();
+    var appointmentMap = new Map();
+    submitButton.addEventListener('click' , function() {
+        createJsonForSubmit();
+    })
+    function createSelectedAppointment(date) {
+        var slcAppointment = document.createElement('div');
+        slcAppointment.className = "selected-appointment";
+        var dcontent = document.createElement('div');
+        dcontent.textContent = date;
+        dcontent.className = "h100 inner-date-content";
+        var dcancel = document.createElement('div');
+        // todo : addEventListener for deleting it when clicked .
+        key = date
+        var villaId = @TempData["VillaId"]?.ToString()
+        appointmentMap.set(key, {VillaId:villaId, Date:date , IsAvailable:true});
+        dcancel.addEventListener('click' , function(e) {
+            e.target.parentElement.remove();
+            appointmentMap.delete(key);
+        });
+        dcancel.textContent = "X";
+        dcancel.className = "btn btn-danger cancel-selected-appointment"
+        slcAppointment.appendChild(dcontent);
+        slcAppointment.appendChild(dcancel);
+        return slcAppointment;
+    } 
+    function createSelectedImage(data) {
+        var slcImg = document.createElement('div');
+        slcImg.className = 'selected-image';
+        var slcImgcontent = document.createElement('div');
+        slcImgcontent.textContent = data.value;
+        slcImgcontent.className = 'inner-img-content';
+        var dcancel = document.createElement('div');
+        // todo : addEventListener for deleting it when clicked .
+        var file = data.files[0];
+        var key = `${file.name}_${Date.now()}`;
+        fileMap.set(key , file);
+        dcancel.addEventListener('click' , function(e) {
+            fileMap.delete(key);
+            e.target.parentElement.remove();
+            remainingImages++;
+            if(remainingImages == 1) {
+                addImage.disabled = false;
+            }
+        });
+        dcancel.textContent = "X";
+        dcancel.className = "btn btn-danger cancel-selected-appointment"
+        slcImg.appendChild(slcImgcontent);
+        slcImg.appendChild(dcancel);
+        return slcImg;
+    }
+    async function createJsonForSubmit() {
+        for(const [key,value] of fileMap) {
+            form.append("Images" , value);
+        }
+        console.log('app : ')
+        let index = 0;
+        for (const [key, value] of appointmentMap) {
+          form.append(`Appointments[${index}].VillaId`, value.VillaId);
+          form.append(`Appointments[${index}].Date`, value.Date);
+          form.append(`Appointments[${index}].IsAvailable`, value.IsAvailable);
+          index++;
+        }
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+        form.set("__RequestVerificationToken" , token);
+        const response = await fetch("/Villa/FinishSubmittingVilla", {
+        method: "POST",
+        body: form
+         });
+         var res = await response.json();
+         if(res.success == false) {
+             errorHtml = '';
+             for(let i = 0 ; i<res.error.length;i++) {
+                 errorHtml += `<p>${res.error[i]}</p>`;
+             }
+             document.getElementById('errors').innerHTML = errorHtml;
+         }
+         else {
+             window.location.href = "/Home/Index";
+         }
+        form = new FormData();
+    }
+    var picker = document.getElementById('picker');
+    picker.addEventListener('change' , function(){
+        if (appointmentMap.get(picker.value) != null) return;
+        document.getElementById('selected-appointments').appendChild(createSelectedAppointment(picker.value))
+    });
+    var addImage = document.getElementById('add-image');
+    var upImage = document.getElementById('up-image');
+
+    upImage.addEventListener('change' , function(e) {
+        if(upImage.value.trim() !== '' && remainingImages > 0) {
+            document.getElementById('selected-images').appendChild(createSelectedImage(upImage));
+            upImage.value = '';
+            remainingImages--;
+            if(remainingImages == 0) {
+                addImage.disabled = true;
+            }
+        }
+    });
+    addImage.addEventListener('click' , function() {
+        upImage.click();
+    });
+</script>

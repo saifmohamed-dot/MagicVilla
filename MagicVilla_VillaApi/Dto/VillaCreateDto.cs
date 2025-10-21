@@ -4,6 +4,8 @@ namespace MagicVilla_VillaApi.Dto
 {
     public class VillaCreateDto
     {
+        [Required(ErrorMessage = "Owner Id Required")]
+        public int OwnerId { get; set; }
         [Required(ErrorMessage = "Name For Villa Can't be Empty")]
         public string Name { get; set; } = string.Empty;
         [Required(ErrorMessage = "Details For Villa Can't be Empty")]
@@ -19,5 +21,9 @@ namespace MagicVilla_VillaApi.Dto
         public string ImageUrl { get; set; } = string.Empty;
         [Required(ErrorMessage = "Amentiy For Villa Can't be Empty")]
         public string Amentiy { get; set; } = string.Empty;
+        [Required]
+        public float Price { get; set; } = 100.20f;
+        [Required]
+        public string Address { get; set; } = "Cairo Egypt";
     }
 }

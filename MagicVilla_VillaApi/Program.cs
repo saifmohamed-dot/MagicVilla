@@ -1,6 +1,6 @@
 using MagicVilla_VillaApi;
 using MagicVilla_VillaApi.DataStore;
-
+using MagicVilla_VillaApi.Models;
 using MagicVilla_VillaApi.Repository;
 using MagicVilla_VillaApi.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,6 +23,9 @@ builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 builder.Services.AddScoped<DbContext , VillasDBContext>();
 builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IRequestedAppointmentRepository, RequestedAppointmentRepository>();
+builder.Services.AddScoped<IVillaPreviewImagesRepository, VillaPreviewImagesRepository>();
 var jwtOptions = builder.Configuration.GetSection("JWT").Get<JwtOption>();
 builder.Services.AddSingleton(jwtOptions);
 builder.Services.AddAuthentication()
