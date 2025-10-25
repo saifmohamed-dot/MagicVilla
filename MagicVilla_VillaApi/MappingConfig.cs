@@ -26,6 +26,7 @@ namespace MagicVilla_VillaApi
             CreateMap<VillaPreviewRequestedAppointmentsDto, RequestedAppointment>().ReverseMap();
             CreateMap<VillaPreviewAppointmentDto, Appointment>().ReverseMap();
             CreateMap<VillaPreviewImages, VillaPreviewImageCreateDto>().ReverseMap();
+            //CreateMap<RequestedAppointment, RequestAppointmentCreateDto>().ReverseMap();
         }
     }
 }

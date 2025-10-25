@@ -7,22 +7,32 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Available Appointments</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="modal-body">
-                    <h1 class="bg-body-secondary">card</h1>
-                    <h1 class="text-bg-info">card</h1>
-                    <h1 class="text-bg-danger">card</h1>
-                    <h1 class="bg-body-secondary">card</h1>
-                    <h1 class="text-bg-info">card</h1>
-                    <h1 class="text-bg-danger">card</h1>
+                <div class="modal-body" id="available-appt">
+                    @{int cnt = 0;}
+                    @foreach(var app in Model.Appointments)
+                    {
+                        
+                        // this mean that this appointment did not requested with this client 
+                        if(app.RequestedAppointments == null || app.RequestedAppointments.Count() == 0)
+                        {
+                            <div class="col-12 btn btn-outline-secondary mb-2 fs-4 appt-btn" date-value="@app.Date" date-id="@app.Id">@app.Date</div>
+                            cnt++;
+                        }
+
+                    }
+                    @if(cnt == 0)
+                    {
+                        <h2>No Available Appointments</h2>
+                    }
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" id="requests-rollback">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="commit-ask" disabled>Ask</button>
                 </div>
 
             </div>
@@ -55,28 +65,44 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
+
     <div class="container my-5">
         <div class="row g-4">
-            <!-- Product Image -->
-            <div class="col-md-5">
-                <h1 class="bg-body-secondary">card</h1>
-                <h1 class="text-bg-info">card</h1>
-                <h1 class="text-bg-danger">card</h1>
+            <!-- User Requested Appointment If Found -->
+            <div class="col-md-5" id="requested-container">
+                @foreach(var app in Model.Appointments)
+                {
+                    if (app.RequestedAppointments == null) continue;
+                    foreach(var req in app.RequestedAppointments)
+                    {
+
+                        if(req.IsTaken == 0)
+                        {
+                            <div class="col-10 btn text-light mb-2 fs-4" style="background-color:#3498db;">
+                                @app.Date <span>In Queue</span>
+                            </div>
+                        }
+                        else if (req.IsTaken == req.ClientId)
+                        {
+                            <div class="col-10 btn btn-success mb-2 fs-4">@app.Date <span>Got It</span></div>
+                        }
+                        else
+                        {
+                            <div class="col-10 btn btn-danger mb-2 fs-4">@app.Date <span>Taken</span></div>
+                        }
+                    }
+                }
             </div>
-
-            <!-- Product Details -->
+            <!-- Villa Details -->
             <div class="col-md-7">
-                <h2 class="fw-bold">Luxury Villa</h2>
-                <p class="text-muted">Category: Beachfront</p>
+                <h2 class="fw-bold">@Model.Name</h2>
+                <p class="text-muted">Address: @Model.Address</p>
                 <p>
-                    Experience a luxurious stay with ocean views, a private pool, and modern design.
-                    Perfect for families and couples seeking relaxation.
+                    @Model.Details
                 </p>
-
-                <h4 class="text-success mb-3">$1,250,000</h4>
-                
+                <h4 class="text-success mb-3">$@Model.Price</h4>              
                 <div class="d-flex gap-3">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Ask for appointment</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="appt-opener">Ask for appointment</button>
                     <button class="btn btn-outline-secondary">Add to Wishlist</button>
                 </div>
             </div>
@@ -84,4 +110,10 @@
     </div>
 
 </div>
-
+<script>
+    window.appData = {
+        ClientId : @TempData["ClientId"]?.ToString(),
+        AppointmentsCnt : @cnt.ToString()
+    };
+</script>
+<script src="~/js/handleAppointmentRequests.js"></script>

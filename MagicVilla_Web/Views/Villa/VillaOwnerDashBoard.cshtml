@@ -1,0 +1,95 @@
+﻿
+<style>
+    .card , .appt {
+        transition : 0.1s ease-in-out;
+        cursor :pointer;
+    }
+    .hover-shadow:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;
+    }
+    .waiting-user{
+        transition: 0.1s ease-in-out;
+        cursor: pointer;
+    }
+</style>
+
+<div class="bg-light rounded-4 shadow-sm p-5 mb-4">
+    <h1 class="fw-bold mb-3">Welcome back, Admin 👋</h1>
+    <p class="text-secondary fs-5 mb-4">
+        Here’s an overview of your platform today. Manage users, view reports, and keep everything running smoothly.
+    </p>
+    <div>
+        <a href="#reports" class="btn btn-primary me-2">View Reports</a>
+        <a href="#users" class="btn btn-outline-secondary">Manage Users</a>
+    </div>
+</div>
+
+<div class="container-fluid row g-0">
+    <div class="col-4 p-3">
+        <div class="card mb-3 hover-shadow">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="~/Images/v3.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Card Title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the content.</p>
+                        <p class="card-text"><small class="text-body-secondary">Updated 3 mins ago</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3 hover-shadow">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="~/Images/v5.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Card Title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the content.</p>
+                        <p class="card-text"><small class="text-body-secondary">Updated 3 mins ago</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3 hover-shadow">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="~/Images/v2.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Card Title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the content.</p>
+                        <p class="card-text"><small class="text-body-secondary">Updated 3 mins ago</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4 p-3">
+        <button class="col-12 mb-4 btn btn-outline-primary p-2">Add Another Appointment For This Villa</button>
+        <div class="bg-light mb-3 fs-5  p-3  d-flex justify-content-between align-items-center hover-shadow appt rounded-1">
+            <div>Random Date Of Birth</div>
+            <span class="badge bg-success">Assigned</span>
+        </div>
+        <div class="bg-light mb-3 fs-5  p-3  d-flex justify-content-between align-items-center hover-shadow appt rounded-1">
+            <div>Random Date Of Birth</div>
+            <span class="badge bg-warning"> Waiting </span>
+        </div>
+        <div class="bg-light mb-3 fs-5  p-3  d-flex justify-content-between align-items-center hover-shadow appt rounded-1">
+            <div>Random Date Of Birth</div>
+            <span class="badge bg-danger"> Closed </span>
+        </div>
+
+    </div>
+    <div class="col-4 p-3">
+        <div class="bg-light mb-3 fs-5  p-3  d-flex justify-content-between align-items-center hover-shadow waiting-user hover-shadow rounded-1">
+            <div class="text-warning">Mohamed Ramadan No1</div>
+            <span class="badge bg-warning"> Assigned </span>
+        </div>
+    </div>
+    
+</div>

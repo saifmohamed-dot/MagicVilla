@@ -6,6 +6,7 @@ using MagicVilla_VillaApi.Repository;
 using MagicVilla_VillaApi.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 
 namespace MagicVilla_VillaApi.Controllers
@@ -92,6 +93,23 @@ namespace MagicVilla_VillaApi.Controllers
             VillaPreviewDto preview = _mapper.Map<VillaPreviewDto>(v);
             _response.PopulateOnSuccess(System.Net.HttpStatusCode.OK, preview);
             return Ok(_response);
+        }
+        [Authorize]
+        [HttpGet("OwnerV")]
+        public async Task<ActionResult<APIResponse>> GetVillasByOwner()
+        {
+            int id = Convert.ToInt32(User.FindFirst(ClaimTypes.PrimarySid)?.Value);
+            try
+            {
+                IEnumerable<OwnerVillaDto> vList = await _repository.GetOwnerVillas(id);
+                _response.PopulateOnSuccess(System.Net.HttpStatusCode.OK, vList);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.PopulateOnFail(System.Net.HttpStatusCode.BadRequest , [ex.Message]);
+                return BadRequest(_response);
+            }
         }
         // start from here ->
         [Authorize]

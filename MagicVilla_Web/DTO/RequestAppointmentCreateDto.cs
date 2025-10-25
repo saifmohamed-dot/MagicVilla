@@ -1,8 +1,8 @@
-﻿namespace MagicVilla_Web.Dto
+﻿namespace MagicVilla_Web.DTO
 {
-    public class VillaPreviewRequestedAppointmentsDto
+    public class RequestAppointmentCreateDto
     {
-        public int Id { get; set; }
+        // i'll validate this with fluentValidation .
         public int AppointmentId { get; set; }
         public int ClientId { get; set; } // the client want to make an appointment .
         public int IsTaken { get; set; } = 0;

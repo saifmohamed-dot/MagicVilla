@@ -1,4 +1,6 @@
-
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MagicVilla_Web.DtoFluentValidations;
 using MagicVilla_Web.Services;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,6 +23,10 @@ namespace MagicVilla_Web
             builder.Services.AddHttpClient<IUserRepository , UserRepository>();
             builder.Services.AddScoped<IUserRepository , UserRepository>();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddScoped<IRequestedAppointmentService , RequestedAppointmentService>();
+            builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
+            builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddFluentValidationClientsideAdapters();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
@@ -60,8 +66,9 @@ namespace MagicVilla_Web
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
-
             app.Run();
+            
+
         }
     }
 }

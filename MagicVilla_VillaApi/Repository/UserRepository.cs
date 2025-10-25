@@ -76,6 +76,7 @@ namespace MagicVilla_VillaApi.Repository
                 })
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            Util.CommonValues.LoggedUserId = user.Id;
             return tokenHandler.WriteToken(token);
         }
 

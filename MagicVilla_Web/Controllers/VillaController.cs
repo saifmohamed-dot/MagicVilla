@@ -24,7 +24,7 @@ namespace MagicVilla_Web.Controllers
             _service = service;
             _mapper = mapper;
         }
-        [Authorize("Admin")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Index()
         {
             List<VillaDto>? list = new();
@@ -50,20 +50,21 @@ namespace MagicVilla_Web.Controllers
         }
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> VillaPreview(int? vId)
+        public async Task<IActionResult> VillaPreview(int? id)
         {
-            if(vId == null)
+            if(id == null)
             {
                 TempData["Error"] = "Must Be Valid Id";
                 return RedirectToAction("Index", "Home");
             }
-            APIResponse response = await ((VillaService)_service).GetVillaPreviewById<APIResponse>(vId.Value, HttpContext.Session.GetString(StaticUtil.TokenName));
+            APIResponse response = await ((VillaService)_service).GetVillaPreviewById<APIResponse>(id.Value, HttpContext.Session.GetString(StaticUtil.TokenName));
             if(response == null || !response.IsSuccess || response.Result == null)
             {
                 TempData["Error"] = "Cannot Display This Villa ";
                 return RedirectToAction("Index", "Home");
             }
             VillaPreviewDto dto = JsonConvert.DeserializeObject<VillaPreviewDto>(Convert.ToString(response.Result)!)!;
+            TempData["ClientId"] = User.FindFirst(ClaimTypes.Sid)?.Value;
             return View(dto);
         }
         [Authorize(Roles = "Admin")]
@@ -86,6 +87,10 @@ namespace MagicVilla_Web.Controllers
                 }
             }
             return View(villa);
+        }
+        public IActionResult VillaOwnerDashBoard()
+        {
+            return View();
         }
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateVilla(int id)
@@ -157,11 +162,11 @@ namespace MagicVilla_Web.Controllers
             }
             return View(dto);
         }
-        public IActionResult TestView()
-        {
-            TempData["VillaId"] = "1";
-            return View("ContinueSubmittingVilla");
-        }
+        //public IActionResult TestView()
+        //{
+        //    TempData["VillaId"] = "1";
+        //    return View("ContinueSubmittingVilla");
+        //}
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]

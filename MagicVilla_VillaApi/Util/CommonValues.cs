@@ -4,5 +4,6 @@
     {
         public readonly static int PageSize = 8;
         public readonly static int IndexPreviewSize = 4;
+        public static int LoggedUserId = 1;
     }
 }

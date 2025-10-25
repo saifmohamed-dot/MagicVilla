@@ -2,6 +2,7 @@
 using MagicVilla_VillaApi.Dto;
 using MagicVilla_VillaApi.Models;
 using MagicVilla_VillaApi.Repository;
+using MagicVilla_VillaApi.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -85,5 +86,43 @@ namespace MagicVilla_VillaApi.Controllers
             _aPIResponse.PopulateOnSuccess(System.Net.HttpStatusCode.Created, $"Created With ID : {id}");
             return Ok(_aPIResponse);
         }
+        [Authorize]
+        [HttpGet("AppointmentRequests/{id:int}")]
+        public async Task<ActionResult<APIResponse>> GetRequests(int? id)
+        {
+            if (id == null)
+            {
+                _aPIResponse.PopulateOnFail(System.Net.HttpStatusCode.BadRequest, ["Appointment Id Can not Be Null"]);
+                return BadRequest(_aPIResponse);
+            }
+            try
+            {
+                var requests = _mapper.Map<IEnumerable<RequestedAppointmentDto>>(await _requestedAppointmentRepository.FindAllAsync(req => req.AppointmentId == id, "Client"));
+                _aPIResponse.PopulateOnSuccess(System.Net.HttpStatusCode.OK, requests);
+                return Ok(_aPIResponse);
+            }
+            catch (Exception ex)
+            {
+                _aPIResponse.PopulateOnFail(System.Net.HttpStatusCode.BadRequest, [ex.Message]);
+                return BadRequest(_aPIResponse);
+            }
+        }
+        [HttpPost("Batch")]
+        [Authorize]
+        public async Task<ActionResult<APIResponse>> CreateBatch(RequestListVM vm)
+        {
+            try
+            {
+                await _requestedAppointmentRepository.BulkInsertRequstedAppointments(_mapper.Map<IEnumerable<RequestedAppointment>>(vm.Requests));
+                _aPIResponse.PopulateOnSuccess(System.Net.HttpStatusCode.Created, "Requests Created Successfully !");
+                return Ok(_aPIResponse);
+            }
+            catch (Exception ex)
+            {
+                _aPIResponse.PopulateOnFail(System.Net.HttpStatusCode.BadRequest, [ex.Message]);
+                return BadRequest(_aPIResponse);
+            }
+        }
+
     }
 }

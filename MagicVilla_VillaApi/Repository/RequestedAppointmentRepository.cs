@@ -5,9 +5,17 @@ namespace MagicVilla_VillaApi.Repository
 {
     public class RequestedAppointmentRepository : Repository<RequestedAppointment>, IRequestedAppointmentRepository
     {
-        public RequestedAppointmentRepository(DbContext dbContext) : base(dbContext) { }
+        readonly DbContext _dbContext;
+        public RequestedAppointmentRepository(DbContext dbContext) : base(dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
-        
+        public async Task BulkInsertRequstedAppointments(IEnumerable<RequestedAppointment> requests)
+        {
+            await _dbContext.Set<RequestedAppointment>().AddRangeAsync(requests);
+            await SaveAsync();
+        }
 
         public Task<RequestedAppointment> UpdateAsync(RequestedAppointment requestedAppointment)
         {
